@@ -11,8 +11,7 @@
 // This define lets Catch create the main test program
 // (Must be in only one place!)
 #include "catch.hpp"
-
-#include <random>
+#include "List.h"
 
 //=======================================================================
 // Test cases
@@ -20,27 +19,21 @@
 
 TEST_CASE( "Create an empty list" ) 
 {
-    Sorted_List l{};
+    Linked_List l{};
 
     REQUIRE( l.is_empty() );
     REQUIRE( l.size() == 0 );
 }
 
-// Solve one TEST_CASE or WHEN at a time!
-//
-// Move this comment and following #if 0 down one case at a time!
-// Make sure to close any open braces before this comment.
-// The #if 0 will disable the rest of the file.
-#if 0
 
 TEST_CASE( "Insert an item in an empty list" ) 
 {
-    Sorted_List l{};
+    Linked_List l{};
 
     l.insert(5);
   
-    REQUIRE( l.is_empty() );
-    REQUIRE( l.size() == 0 );
+    REQUIRE( l.is_empty() == false );
+    REQUIRE( l.size() == 1 );
   
 }
 
@@ -49,32 +42,32 @@ SCENARIO( "Empty lists" )
   
     GIVEN( "An empty list" ) 
     {
-	Sorted_List l{};
+	Linked_List l{};
 
 	REQUIRE( l.is_empty() );
 	REQUIRE( l.size() == 0 );
+
+	l.insert(10);
     
 	WHEN( "an item is inserted" )
 	{
-
-	    // insert an item
       
 	    THEN( "the size increase and the item is first in the list" )
 	    {
-		REQUIRE( l.is_empty()  );
-		REQUIRE( l.size() == 0 );
-		REQUIRE( /* test that item is first in list */ );
+			REQUIRE( l.is_empty() == false );
+			REQUIRE( l.size() == 1 );
+			REQUIRE( l.return_first() == 10 );
 	    }
 	}
-    
+
+	l.remove(10);
+
 	WHEN( "an item is removed" )
 	{
-
-	    // remove an item
-      
 	    THEN( "the list is still empty" )
 	    {
-		// add your REQUIRE statements
+			REQUIRE( l.is_empty() == true );
+			REQUIRE( l.size() == 0 );
 	    }
 	}
     
@@ -82,26 +75,38 @@ SCENARIO( "Empty lists" )
 	{
 
 	    // copy your list to a new variable (copy constructor)
+		Linked_List new_list{l};
       
 	    THEN( "the new list is also empty" )
 	    {
-		// add your REQUIRE statements
+			REQUIRE( new_list.is_empty() );
+			REQUIRE( new_list.size() == 0 );
 	    }
 	}
     
 	WHEN( "the list is copied to an existing non-empty list" )
 	{
 	    // create and fill a list to act as the existing list
+		Linked_List filled_list{};
+		filled_list.insert(1);
+		filled_list.insert(2);
+		filled_list.insert(3);
+		filled_list.insert(4);
 	    // copy (assign) your empty list to the existing
+		Linked_List empty_list{};
+		filled_list = empty_list;
       
 	    THEN( "the existing list is also empty" )
 	    {
 		// add your REQUIRE statements
+			REQUIRE( filled_list.is_empty() );
+			REQUIRE( filled_list.size() == 0 );
 	    }
       
 	}
     }
 }
+
 
 SCENARIO( "Single item lists" )
 {
@@ -110,39 +115,61 @@ SCENARIO( "Single item lists" )
     {
 
 	// create the given scenario
+		Linked_List list1{};
+		list1.insert(10);
     
 	WHEN( "a smaller item is inserted" )
-	{
-	    THEN( /* describe what will happen */ )
+	{	
+		list1.insert(1);
+
+	    THEN( "list size is 2 and first item is 1" )
 	    {
+			REQUIRE( list1.size() == 2 );
+			REQUIRE( list1.return_first() == 1 );
 	    }
 	}
 	WHEN( "a larger item is inserted" )
 	{
-	    THEN( /* describe what will happen */ )
+		list1.insert(200);
+
+	    THEN( "list size is 2 and first item is 10" )
 	    {
+			REQUIRE( list1.size() == 2 );
+			REQUIRE( list1.return_first() == 10 );
 	    }
 	}
 	WHEN( "an item is removed" )
 	{
-	    THEN( /* describe what will happen */ )
+		list1.remove(10);
+
+	    THEN( "list size is 0" )
 	    {
+			REQUIRE( list1.size() == 0 );
 	    }
 	}
 	WHEN( "the list is copied to a new list" )
 	{
-	    THEN( /* describe what will happen */ )
+		Linked_List list2{list1};
+
+	    THEN( "New list is identical to old list" )
 	    {
+			REQUIRE( list2.size() == 1 );
 	    }
 	}
 	WHEN( "the list is copied to an existing non-empty list" )
 	{
-	    THEN( /* describe what will happen */ )
+		Linked_List list2{};
+		list2.insert(5);
+		list2 = list1.copy();
+
+	    THEN( "existing list in same as copied" )
 	    {
+			REQUIRE( list2.size() == 1 );
 	    }
 	}
     }
 }
+
 
 SCENARIO( "Multi-item lists" )
 {
@@ -152,21 +179,63 @@ SCENARIO( "Multi-item lists" )
 
 	// create the given scenario and all THEN statements
 	// and all REQUIRE statements
+	Linked_List l{};
+	l.insert(10);
+	l.insert(20);
+	l.insert(30);
+	l.insert(40);
+	l.insert(50);
     
 	WHEN( "an item smaller than all other is inserted" )
 	{
+		l.insert(5);
+
+		THEN( "" )
+	    {
+			REQUIRE( l.size() == 6 );
+			REQUIRE( l.return_first() == 5 );
+			REQUIRE( l.get_index(5) == 0 );
+	    }
 	}
 	WHEN( "an item larger than all other is inserted" )
 	{
+		l.insert(60);
+
+		THEN( "" )
+	    {
+			REQUIRE( l.size() == 6 );
+			REQUIRE( l.get_index(60) == 5 );
+	    }
 	}
 	WHEN( "an item smaller than all but one item is inserted" )
 	{
+		l.insert(15);
+
+		THEN( "" )
+	    {
+			REQUIRE( l.size() == 6 );
+			REQUIRE( l.get_index(15) == 1 );
+	    }
 	}
 	WHEN( "an item larger than all but one item is inserted" )
 	{
+		l.insert(45);
+
+		THEN( "" )
+	    {
+			REQUIRE( l.size() == 6 );
+			REQUIRE( l.get_index(45) == 4 );
+	    }
 	}
 	WHEN( "an item is removed" )
 	{
+		l.remove(20);
+
+		THEN( "" )
+	    {
+			REQUIRE( l.size() == 4 );
+			REQUIRE( l.get_index(30) == 1 );
+	    }
 	}
 	WHEN( "all items are removed" )
 	{
@@ -179,6 +248,13 @@ SCENARIO( "Multi-item lists" )
 	}
     }
 }
+
+// Solve one TEST_CASE or WHEN at a time!
+//
+// Move this comment and following #if 0 down one case at a time!
+// Make sure to close any open braces before this comment.
+// The #if 0 will disable the rest of the file.
+#if 0
 
 SCENARIO( "Lists can be copied" )
 {
