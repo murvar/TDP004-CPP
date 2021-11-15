@@ -12,6 +12,7 @@
 // (Must be in only one place!)
 #include "catch.hpp"
 #include "List.h"
+#include <random>
 
 //=======================================================================
 // Test cases
@@ -19,7 +20,7 @@
 
 TEST_CASE( "Create an empty list" ) 
 {
-    Linked_List l{};
+    Sorted_List l{};
 
     REQUIRE( l.is_empty() );
     REQUIRE( l.size() == 0 );
@@ -28,7 +29,7 @@ TEST_CASE( "Create an empty list" )
 
 TEST_CASE( "Insert an item in an empty list" ) 
 {
-    Linked_List l{};
+    Sorted_List l{};
 
     l.insert(5);
   
@@ -42,7 +43,7 @@ SCENARIO( "Empty lists" )
   
     GIVEN( "An empty list" ) 
     {
-	Linked_List l{};
+	Sorted_List l{};
 
 	REQUIRE( l.is_empty() );
 	REQUIRE( l.size() == 0 );
@@ -75,7 +76,7 @@ SCENARIO( "Empty lists" )
 	{
 
 	    // copy your list to a new variable (copy constructor)
-		Linked_List new_list{l};
+		Sorted_List new_list{l};
       
 	    THEN( "the new list is also empty" )
 	    {
@@ -87,13 +88,13 @@ SCENARIO( "Empty lists" )
 	WHEN( "the list is copied to an existing non-empty list" )
 	{
 	    // create and fill a list to act as the existing list
-		Linked_List filled_list{};
+		Sorted_List filled_list{};
 		filled_list.insert(1);
 		filled_list.insert(2);
 		filled_list.insert(3);
 		filled_list.insert(4);
 	    // copy (assign) your empty list to the existing
-		Linked_List empty_list{};
+		Sorted_List empty_list{};
 		filled_list = empty_list;
       
 	    THEN( "the existing list is also empty" )
@@ -115,7 +116,7 @@ SCENARIO( "Single item lists" )
     {
 
 	// create the given scenario
-		Linked_List list1{};
+		Sorted_List list1{};
 		list1.insert(10);
     
 	WHEN( "a smaller item is inserted" )
@@ -149,7 +150,7 @@ SCENARIO( "Single item lists" )
 	}
 	WHEN( "the list is copied to a new list" )
 	{
-		Linked_List list2{list1};
+		Sorted_List list2{list1};
 
 	    THEN( "New list is identical to old list" )
 	    {
@@ -158,9 +159,10 @@ SCENARIO( "Single item lists" )
 	}
 	WHEN( "the list is copied to an existing non-empty list" )
 	{
-		Linked_List list2{};
+		Sorted_List list2{};
 		list2.insert(5);
-		list2 = list1.copy();
+		list2.insert(3);
+		list2 = list1;
 
 	    THEN( "existing list in same as copied" )
 	    {
@@ -179,7 +181,7 @@ SCENARIO( "Multi-item lists" )
 
 	// create the given scenario and all THEN statements
 	// and all REQUIRE statements
-	Linked_List l{};
+	Sorted_List l{};
 	l.insert(10);
 	l.insert(20);
 	l.insert(30);
@@ -239,44 +241,78 @@ SCENARIO( "Multi-item lists" )
 	}
 	WHEN( "all items are removed" )
 	{
+		l.delete_all();
+
+		THEN( "" )
+	    {
+			REQUIRE( l.size() == 0 );
+			REQUIRE( l.is_empty() );
+	    }
 	}
 	WHEN( "the list is copied to a new list" )
 	{
+		Sorted_List l2{l};
+
+		THEN( "" )
+	    {
+			REQUIRE( l2.size() == 5 );
+	    }
 	}
 	WHEN( "the list is copied to an existing non-empty list" )
 	{
+		Sorted_List l2{};
+		l2.insert(3);
+		l2.insert(4);
+		l2.insert(5);
+		l2 = l;
+
+		THEN( "" )
+	    {
+			REQUIRE( l2.size() == 5 );
+	    }
 	}
     }
 }
 
-// Solve one TEST_CASE or WHEN at a time!
-//
-// Move this comment and following #if 0 down one case at a time!
-// Make sure to close any open braces before this comment.
-// The #if 0 will disable the rest of the file.
-#if 0
+
 
 SCENARIO( "Lists can be copied" )
 {
 
     GIVEN( "A list with five items in it, and a new copy of that list" )
     {
+		Sorted_List l1{};
+		l1.insert(5);
+		l1.insert(6);
+		l1.insert(9);
+		l1.insert(4);
+		l1.insert(8);
+		Sorted_List l2{l1};
 
 	WHEN( "the original list is changed" )
 	{
+		l1.remove(8);
+
 	    THEN( "the copy remain unmodified" )
 	    {
+			REQUIRE( l2.size() == 5 );
+			REQUIRE( l1.size() == 4 );
 	    }
 	}
 
 	WHEN( "the copied list is changed" )
 	{
+		l2.remove(8);
+
 	    THEN( "the original remain unmodified" )
 	    {
+			REQUIRE( l2.size() == 4 );
+			REQUIRE( l1.size() == 5 );
 	    }
 	}
     }
 }
+
 
 SCENARIO( "Lists can be heavily used" )
 {
@@ -285,6 +321,7 @@ SCENARIO( "Lists can be heavily used" )
     {
     
 	// create the given list with 1000 random items
+	Sorted_List l{};
 	std::random_device rd;
 	std::uniform_int_distribution<int> uniform(1,1000);
     
@@ -292,25 +329,44 @@ SCENARIO( "Lists can be heavily used" )
 	{
 	    int random { uniform(rd) }; // generate a random number
 	    // insert into list
+		l.insert(random);
+
 	}
     
 	WHEN( "the list have 1000 random numbers inserted" )
 	{
+		for (int i{0}; i < 1000; ++i)
+	{
+	    int random { uniform(rd) }; // generate a random number
+	    // insert into list
+		l.insert(random);
+
+	}
 	    // THEN the list have 2000 items in correct order
 	    // (assumes unique inserts or duplicates allowed)
+		THEN( "the list have 2000 items in correct order" )
+	    {
+			REQUIRE( l.size() == 2000 );
+	    }
 	}
 
 	WHEN( "the list have 2000 random numbers removed" )
 	{
+		l.delete_all();
 	    // THEN the list is empty
 	    // (assumes successful removes)
+		THEN( "the list is empty" )
+	    {
+			REQUIRE( l.size() == 0 );
+	    }
 	}
     }
 }
 
-Sorted_List trigger_move(Sorted_List l)
+Sorted_List trigger_move(Sorted_List l) //????
 {
     // do some (any) modification to list
+	l.insert(100);
     return l;
 }
 
@@ -322,6 +378,11 @@ SCENARIO( "Lists can be passed to functions" )
 
 	Sorted_List given{};
 	// insert 5 items
+	given.insert(6);
+	given.insert(3);
+	given.insert(4);
+	given.insert(9);
+	given.insert(5);
   
 	WHEN( "the list is passed to trigger_move()" )
 	{
@@ -330,6 +391,8 @@ SCENARIO( "Lists can be passed to functions" )
       
 	    THEN( "the given list remain and the result have the change" )
 	    {
+			REQUIRE( given.size() == 5 );
+			REQUIRE( l.get_index(100) == 5 );
 	    }
 	}
     }
@@ -351,7 +414,19 @@ SCENARIO( "Lists can be passed to functions" )
 void use_const_list(Sorted_List const& l)
 {
     // perform every operation that do not modify the list here
-    return l;
+	l.print();
+	l.return_first();
+	l.size();
+	l.is_empty();
+
+    return;
 }
+
+// Solve one TEST_CASE or WHEN at a time!
+//
+// Move this comment and following #if 0 down one case at a time!
+// Make sure to close any open braces before this comment.
+// The #if 0 will disable the rest of the file.
+#if 0
 
 #endif

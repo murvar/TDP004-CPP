@@ -2,24 +2,22 @@
 #ifndef LIST_H
 #define LIST_H
 
-class Linked_List
+class Sorted_List
 {
 public:
-    Linked_List() = default;
-    Linked_List(const Linked_List& list);
-    ~Linked_List();
-    void push_front(int value);
-    void push_back(int value);
+    Sorted_List() = default;
+    Sorted_List(Sorted_List const& list);
+    Sorted_List(Sorted_List&& list);
+    ~Sorted_List();
     void insert(int value);
-    int pop();
     int return_first() const;
     bool is_empty() const;
     int size() const;
     void remove(int value);
     void print() const;
-    Linked_List copy();
     void delete_all();
-    int get_index(int value);
+    int get_index(int value) const;
+    void operator=(const Sorted_List& rhs);
 
 
 private:
@@ -29,10 +27,9 @@ private:
         Node* next;
     };
     int size_of_list{0};
-    void compare(int value);
-    void print_r(Node* p) const;
     Node* first = nullptr;
-    void insert_rec(Node* p, int value);
+    void print_r(Node* p) const;
+    void insert_rec(Node*& p, int const value);
 };
 
 #endif
