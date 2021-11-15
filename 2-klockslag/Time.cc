@@ -89,15 +89,14 @@ return add;
 // har uppdaterats och att rätt värde returneras. Motsvarande för dekrement.
 Time Time::operator++()
 {
-  Time temp{*this};
-  temp = temp + 1;
-  return temp;
+  *this = *this + 1;
+  return(*this);
 }
 
 Time Time::operator++(int)
 {
-  Time temp{*this};
-  temp = temp + 1;
+  Time temp{hour, min, sec};
+  *this = *this + 1;
   return temp;
 }
 
@@ -140,15 +139,14 @@ Time Time::operator-(int i) const
 
 Time Time::operator--()
 {
-  Time temp = *this;
-  temp = temp - 1;
-  return temp;
+  *this = *this - 1;
+  return(*this);
 }
 
 Time Time::operator--(int)
 {
-  Time temp = *this;
-  temp = temp - 1;
+  Time temp{hour, min, sec};
+  *this = *this - 1;
   return temp;
 }
 

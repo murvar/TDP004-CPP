@@ -46,14 +46,14 @@ TEST_CASE( "Adds time" )
   Time t2{t1 + 100};
   REQUIRE( t2.to_string() == "00:01:40" );
 
-  Time t3{t2++};
-  REQUIRE( t3.to_string() == "00:01:41" );
+  t2++;
+  REQUIRE( t2.to_string() == "00:01:41" );
 
-  Time t4{++t3};
-  REQUIRE( t4.to_string() == "00:01:42" );
+  ++t2;
+  REQUIRE( t2.to_string() == "00:01:42" );
 
   Time t5{t2 + (-99)};
-  REQUIRE( t5.to_string() == "00:00:01" );
+  REQUIRE( t5.to_string() == "00:00:03" );
   Time t6{t1 + 100000};
   REQUIRE( t6.to_string() == "03:46:40" );
 }
@@ -64,14 +64,14 @@ TEST_CASE( "Subtracts time" )
   Time t2{t1 - 100};
   REQUIRE( t2.to_string() == "23:58:20" );
 
-  Time t3 {t2--};
-  REQUIRE( t3.to_string() == "23:58:19" );
+  t2--;
+  REQUIRE( t2.to_string() == "23:58:19" );
 
-  Time t4 {--t3};
-  REQUIRE( t4.to_string() == "23:58:18" );
+  --t2;
+  REQUIRE( t2.to_string() == "23:58:18" );
 
   Time t5{t2 - (-100)};
-  REQUIRE( t5.to_string() == "00:00:00" );
+  REQUIRE( t5.to_string() == "23:59:58" );
 
 }
 
