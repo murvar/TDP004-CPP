@@ -1,4 +1,4 @@
-#ifndef MALLSTACK_H 
+#ifndef MALLSTACK_H
 #define MALLSTACK_H
 
 template <typename T>

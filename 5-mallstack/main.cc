@@ -7,14 +7,14 @@
 using namespace std;
 
 template<typename Container, typename T>
-void mal_func(Container const& c)
+Linked_Stack mal_func(Container const& c)
 {   
     Linked_Stack<T> stack;
     for (auto iterator = c.rbegin(); iterator != c.rend(); ++iterator)
     {
         stack.push(*iterator);
     }
-    stack.display();
+    return stack;
 }
 
 
