@@ -17,9 +17,11 @@ public:
     void print() const;
     void delete_all();
     int get_index(int value) const;
-    // X Komplettering: Tilldelning ska inte returnera void. 
-    Sorted_List operator=(const Sorted_List& rhs);
-    // Komplettering: Flyttilldelning saknas.
+    // Komplettering: Tilldelning ska returnera en referens till sig självt, int
+    // en kopia.
+    Sorted_List& operator=(const Sorted_List& rhs);
+    // Komplettering kvarstår: Flyttilldelning saknas.
+    Sorted_List& operator=(Sorted_List&& rhs);
 
 
 private:
@@ -29,7 +31,6 @@ private:
         Node* next;
     };
     int size_of_list{0};
-    // X Komplettering 7-1
     Node* first{nullptr};
     void print_r(Node* p) const;
     void insert_rec(Node*& p, int const value);

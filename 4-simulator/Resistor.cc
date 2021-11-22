@@ -1,32 +1,30 @@
-
 #include "Resistor.h"
 
-Resistor::Resistor(string const& name, float const& r, Connection & p, Connection & n) : 
-		Component(name, p, n), 
-        r(r) 
-        {}
+Resistor::Resistor(string const& name, double const& r, Connection & p, Connection & n) : 
+	Component{name, p, n}, 
+	resistance{r}
+	{}
 
-void Resistor::move(const float & timeunits)
+void Resistor::compute(double const& time)
 {
-	// How much to move
-	double chargeToMove { (getVoltage() / r) * timeunits };
-
-	float aSide { p->getCharge() };
-	float bSide { n->getCharge() };
+	double charge {get_voltage() / resistance * time};
+	double positive {p->get_charge()};
+	double negative {n->get_charge()};
 	
-	if ( aSide > bSide )
+	if (positive > negative)
 	{
-		_a->setCharge( aSide - chargeToMove );
-		_b->setCharge( bSide + chargeToMove );
+		p->set_charge(positive - charge);
+		n->set_charge(negative + charge);
 	}
 	else
 	{
-		p->setCharge( bSide - chargeToMove );
-		n->setCharge( aSide + chargeToMove );
+		n->set_charge(negative - charge);
+		p->set_charge(positive + charge);
 	}
 }
 
-float Resistor::getCurrent()
+double Resistor::get_current()
 {
-	return getVoltage() /r;
+	return (get_voltage() / resistance);
 }
+

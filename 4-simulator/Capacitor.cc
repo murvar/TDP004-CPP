@@ -1,34 +1,34 @@
 #include "Capacitor.h"
 
-Capacitor::Capacitor(string const& name, float const& c, Connection & p, Connection & n) : 
-		Component(name, p, n), 
-        c(c), _charge(0) 
-        {}
+Capacitor::Capacitor(string const& name, double const& c, Connection & p, Connection & n) : 
+		Component{name, p, n}, 
+		capacitance{c}, 
+		charge{0} 
+		{}
 
-void Capacitor::move(const float & timeunits)
+void Capacitor::compute(double const& time)
 {
-	// How much to move
-	double chargeToMove { c * (getVoltage() - _charge) * timeunits };
+	double new_charge { capacitance * (get_voltage() - charge) * time };
 
-	// Add to capacitor charge
-	_charge += chargeToMove;
+	charge += new_charge;
 
-	float aSide { _a->getCharge() };
-	float bSide { _b->getCharge() };
+	double positive { p->get_charge() };
+	double negative { n->get_charge() };
 	
-	if ( aSide > bSide )
+	if ( positive > negative )
 	{
-		_a->setCharge( aSide - chargeToMove );
-		_b->setCharge( bSide + chargeToMove );
+		p->set_charge( positive - new_charge );
+		n->set_charge( negative + new_charge );
 	}
 	else
 	{
-		_b->setCharge( bSide - chargeToMove );
-		_a->setCharge( aSide + chargeToMove );
+		n->set_charge( negative - new_charge );
+		p->set_charge( positive + new_charge );
 	}
 }
 
-float Capacitor::getCurrent()
+double Capacitor::get_current()
 {
-	return abs(c * (getVoltage() - _charge));
+	return abs( capacitance * (get_voltage() - charge));
 }
+

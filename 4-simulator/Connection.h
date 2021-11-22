@@ -1,19 +1,16 @@
-#ifndef CONNECTION_H
-#define CONNECTION_H
+#pragma once
 
 class Connection
 {
-
 public:
 	Connection();
 
-	void setCharge(const float & charge);
-	float getCharge() const;
+	void set_charge(double const& c);
+	
+	double get_charge() const;
 
 private:
-
-	float _charge;
-
+	double charge;
 };
 
-#endif
+

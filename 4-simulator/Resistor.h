@@ -1,5 +1,4 @@
-#ifndef RESISTOR_COMPONENT_H
-#define RESISTOR_COMPONENT_H
+#pragma once
 
 #include "Component.h"
 #include <string>
@@ -9,13 +8,11 @@ using namespace std;
 class Resistor : public Component
 {
 public:
-	Resistor(string const& name, float const& r, Connection & p, Connection & n);
+	Resistor(string const& name, double const& r, Connection & p, Connection & n);
 
-	void move(float const& timeunits);
-	float getCurrent();
+	void compute(double const& time);
+	double get_current();
 
 private:
-	float r;
+	const double resistance;
 };
-
-#endif

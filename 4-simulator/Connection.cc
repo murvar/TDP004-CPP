@@ -1,17 +1,15 @@
-#include <string>
-
 #include "Connection.h"
 
 Connection::Connection() : 
-c{0} 
-{}
+	charge{0} 
+	{}
 
-void Connection::setCharge(float const& c)
+void Connection::set_charge(double const& c)
 {
-	c = c;
+	charge = c;
 }
 
-float Connection::getCharge() const
+double Connection::get_charge() const
 {
-	return _charge;
+	return charge;
 }

@@ -1,5 +1,4 @@
-#ifndef CAPACITOR_COMPONENT_H
-#define CAPACITOR_COMPONENT_H
+#pragma once
 
 #include "Component.h"
 #include <string>
@@ -9,14 +8,12 @@ using namespace std;
 class Capacitor : public Component
 {
 public:
-	Capacitor(string const& name, float const& c, Connection & p, Connection & n);
+	Capacitor(string const& name, double const& c, Connection & p, Connection & n);
 
-	void move(const float & timeunits);
-	float getCurrent();
+	void compute(double const& time);
+	double get_current();
 
 private:
-	float c;
-	float _charge;
+	const double capacitance;
+	double charge;
 };
-
-#endif

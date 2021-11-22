@@ -1,12 +1,23 @@
 #include "Battery.h"
 
-Battery::Battery(const string & name, float const& u, Connection & p, Connection & n) : 
-		Component(name, p, n), 
-        u(u) 
-        {}
+Battery::Battery(string const& name, double const& v, Connection & p, Connection & n) : 
+		Component{name, p, n}, 
+		voltage{v} 
+		{}
 
-void Battery::move(const float &)
+double Battery::get_voltage() 
 {
-	p->setCharge(u);
-	n->setCharge(0);
+	return voltage;
 }
+	
+double Battery::get_current() 
+{
+	return 0;
+}
+
+void Battery::compute(double const&)
+{
+	p->set_charge(voltage);
+	n->set_charge(0);
+}
+

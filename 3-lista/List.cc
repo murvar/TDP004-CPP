@@ -148,7 +148,7 @@ int Sorted_List::get_index(int value) const
     return(-1);
 }
 
-Sorted_List Sorted_List::operator=(const Sorted_List& rhs)
+Sorted_List& Sorted_List::operator=(const Sorted_List& rhs)
 {
     // Kommentar: Snyggt att du återanvänder konstruktorn!
     Sorted_List l{rhs};
@@ -156,5 +156,14 @@ Sorted_List Sorted_List::operator=(const Sorted_List& rhs)
     first = l.first;
     size_of_list = l.size_of_list;
     l.first = nullptr;
+    return *this;
+}
+
+Sorted_List& Sorted_List::operator=(Sorted_List&& rhs)
+{
+    delete_all();
+    first = rhs.first;
+    size_of_list = rhs.size_of_list;
+    rhs.first = nullptr;
     return *this;
 }

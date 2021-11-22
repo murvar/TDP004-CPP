@@ -1,17 +1,20 @@
 #include "Component.h"
-
-using namespace std;
+#include <cmath>
 
 Component::Component(string const& name, Connection & p, Connection & n) :
-	name{name},
-     p{&p},
-     n(&n) 
-     {}
+	name{name}, 
+	p{&p}, 
+	n{&n}
+	{}
 
 Component::~Component() {}
 
+string Component::get_name() const
+{
+	return name;
+}
 
-// double Component::getVoltage()
-// {
-// 	return fabs( _a->getCharge() - _b->getCharge() );
-// }
+double Component::get_voltage()
+{
+	return fabs( p->get_charge() - n->get_charge() );
+}

@@ -1,5 +1,4 @@
-#ifndef BATTERY_H
-#define BATTERY_H
+#pragma once
 
 #include "Component.h"
 #include <string>
@@ -9,15 +8,14 @@ using namespace std;
 class Battery : public Component
 {
 public:
-	Battery(const string & name, float const& u, Connection & p, Connection & n);
+	Battery(string const& name, double const& v, Connection & p, Connection & n);
 
-	void move(float const&);
+	void compute(double const&);
 
-	double getVoltage() {return u;};
-	float getCurrent() {return 0;};
+	double get_voltage();
+
+	double get_current();
 
 private:
-	float u;
+	const double voltage;
 };
-
-#endif
