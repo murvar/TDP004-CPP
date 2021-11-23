@@ -30,15 +30,15 @@ Linked_Stack<T>::Linked_Stack(Linked_Stack&& stack) :
 
 template <typename T>
 Linked_Stack<T>::~Linked_Stack()
-{ 
+{
     delete_all();
 }
 
 template <typename T>
 void Linked_Stack<T>::push(T data)
 {
-    top = new Node{data, top}; 
-    size_of_stack += 1;   
+    top = new Node{data, top};
+    size_of_stack += 1;
 }
 
 template <typename T>
@@ -58,7 +58,7 @@ T Linked_Stack<T>::pop()
         cout << "The stack seems to be empty" << endl;
         exit(1);
     }
-    
+
 }
 
 template <typename T>
@@ -85,7 +85,7 @@ void Linked_Stack<T>::display() const
         Node* temp = top;
         while (temp != nullptr)
         {
-            cout << temp->data; 
+            cout << temp->data;
             if (temp->next != nullptr)
             {
                 cout << "-> ";
@@ -100,7 +100,7 @@ template <typename T>
 void Linked_Stack<T>::delete_all()
 {
     Node* temp = top;
-    
+
     while (top != nullptr)
     {
         top = top->next;

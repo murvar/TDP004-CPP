@@ -7,8 +7,8 @@
 using namespace std;
 
 template<typename Container, typename T>
-Linked_Stack mal_func(Container const& c)
-{   
+Linked_Stack<T> mal_func(Container const& c)
+{
     Linked_Stack<T> stack;
     for (auto iterator = c.rbegin(); iterator != c.rend(); ++iterator)
     {
