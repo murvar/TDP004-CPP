@@ -4,7 +4,7 @@ Connection::Connection() :
 	charge{0} 
 	{}
 
-void Connection::set_charge(double const& c)
+void Connection::set_charge(double const c)
 {
 	charge = c;
 }

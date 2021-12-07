@@ -24,4 +24,9 @@ int main()
     mal_func<vector<int>, int>(v);
     list<double> l = { 7.0, 5.12, 16.3, 8.032 };
     mal_func<list<double>, double>(l);
+    
+
+    // Komplettering: Du har ingen kod som testar att implementationen som helhet
+    // fungerar. Du behöver inte använda catch, men du ska åtminstone instansiera
+    // stacken med olika datatyper och anropa alla medlemsfunktioner.
 }

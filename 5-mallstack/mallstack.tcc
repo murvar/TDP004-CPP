@@ -1,5 +1,7 @@
 #include <iostream>
-using namespace std;
+//x Komplettering: Använd aldrig using namespace i tcc-filer. Tänk på att tcc-filen
+// inkluderas i h-filen som inkluderas av användaren av stacken, och de kanske inte
+// vill få in hela std i sin namespace.
 
 template <typename T>
 Linked_Stack<T>::Linked_Stack(Linked_Stack const& stack)
@@ -55,7 +57,9 @@ T Linked_Stack<T>::pop()
     }
     else
     {
-        cout << "The stack seems to be empty" << endl;
+        std::cout << "The stack seems to be empty" << std::endl;
+        // Kommentar: Att anropa exit är lite drastiskt. Kasta hellre ett undantag,
+        // så att användaren kan fånga det.
         exit(1);
     }
 
@@ -78,22 +82,22 @@ void Linked_Stack<T>::display() const
 {
     if (top == nullptr)
     {
-        cout << "Stack is empty" << endl;
+        std::cout << "Stack is empty" << std::endl;
     }
     else
     {
         Node* temp = top;
         while (temp != nullptr)
         {
-            cout << temp->data;
+            std::cout << temp->data;
             if (temp->next != nullptr)
             {
-                cout << "-> ";
+                std::cout << "-> ";
             }
             temp = temp->next;
         }
     }
-    cout << endl;
+    std::cout << std::endl;
 }
 
 template <typename T>

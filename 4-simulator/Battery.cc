@@ -1,5 +1,7 @@
 #include "Battery.h"
 
+using namespace std;
+
 Battery::Battery(string const& name, double const& v, Connection & p, Connection & n) : 
 		Component{name, p, n}, 
 		voltage{v} 

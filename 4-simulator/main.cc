@@ -1,6 +1,9 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+// Kommentar: Det är helt ok att ha flera klasser i samma h-fil, förutsatt
+// att de har en tydlig koppling till varandra. Här vore det t.ex. ok att
+// lägga alla komponenter i samma fil.
 #include "Component.h"
 #include "Connection.h"
 #include "Battery.h"
@@ -9,18 +12,31 @@
 
 using namespace std;
 
-void validate(char * argv [])
+void validate(int argc, char * argv [])
 {
+    //x Komplettering: Kontrollera alltid argc innan argv avrefereras. Man vill även
+    // ha ett speciellt felmeddelande om antalet argument inte stämmer, som förklarar
+    // vilka argument som förväntas.
+    // Komplettering: Gör rimlighetskontroll av värdena.
+	if(argc != 5)
+	{
+		cout << "Wrong number of arguments!" << endl;
+		exit(1);
+	}
+	
 	try
 	{
 		stoi(argv[1]);
 	}
+        // Kommentar: catch-all bör överlag undvikas. Fånga hellre specifika fel. Kastas
+        // något fel man inte förväntar sig vill man oftasta att programmet avslutas,
+        // men en catch-all riskerar att fånga felet istället.
 	catch(...)
 	{
 		cout << "Sim iterations must be of type int!" << endl;
 		exit(1);
 	}
-		
+
 	try
 	{
 		stoi(argv[2]);
@@ -30,7 +46,7 @@ void validate(char * argv [])
 		cout << "Print iterations must be of type int!!" << endl;
 		exit(1);
 	}
-		
+
 	try
 	{
 		stod(argv[3]);
@@ -41,7 +57,7 @@ void validate(char * argv [])
 		cout << "Time must be of type double!" << endl;
 		exit(1);
 	}
-		
+
 	try
 	{
 		stod(argv[4]);
@@ -55,17 +71,19 @@ void validate(char * argv [])
 
 void simulate(vector<Component*> & net, int const& sim_iterations, int const& print_iterations, const double & time)
 {
+	cout << setw(11);
+
 	for (Component* c : net)
 	{
-		cout << setw(12) << c->get_name() << "    ";
+		cout << c->get_name() << setw(12);
 	}
-	cout << endl << " ";
+	cout << endl << setw(5);
 
 	for (string::size_type i = 0; i < net.size(); ++i)
 	{
-		cout << "Volt" << "\t" << "Curr" << "\t";
+            //x Komplettering: Använd setw istället för tab för att få till utseendet.
+		cout << "Volt" << setw(6) << "Curr" << setw(6);
 	}
-	cout << endl;
 
 	for (int i = 0; i < sim_iterations; ++i)
 	{
@@ -76,16 +94,22 @@ void simulate(vector<Component*> & net, int const& sim_iterations, int const& pr
 
 		if ((i + 1) % (sim_iterations / print_iterations) == 0)
 		{
+			cout << endl << setw(5);
 			for (Component* c : net)
 			{
-				cout << setprecision(2) << fixed;
-				cout << c->get_voltage() << "\t";
-				cout << c->get_current() << "\t";
+				cout << setprecision(2) << fixed
+				 	 << c->get_voltage() << setw(6)
+					 << c->get_current() << setw(6);
 			}
-			cout << endl;
+
 		}
 	}
+	cout << endl;
 
+        // Kommentar: Den här vore rimligare att ha i en egen funktion. Är det säkert
+        // att man alltid vill ta bort komponenterna direkt efter simulering? I vilket
+        // fall borde vektorn även tömmas, eftersom den annars är full av ogiltiga
+        // pekare.
 	for (Component* c : net)
 	{
 		delete c;
@@ -130,9 +154,9 @@ void example3(double voltage, int sim_iterations, int print_iterations, double t
 	simulate(net, sim_iterations, print_iterations, time);
 }
 
-int main (int, char * argv [])
+int main (int argc, char * argv [])
 {
-	validate(argv);
+	validate(argc, argv);
 
 	int sim_iterations {stoi(argv[1])};
 	int print_iterations {stoi(argv[2])};

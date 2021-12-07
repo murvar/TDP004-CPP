@@ -1,5 +1,7 @@
 #include "Capacitor.h"
 
+using namespace std;
+
 Capacitor::Capacitor(string const& name, double const& c, Connection & p, Connection & n) : 
 		Component{name, p, n}, 
 		capacitance{c}, 

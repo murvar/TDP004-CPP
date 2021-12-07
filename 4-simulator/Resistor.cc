@@ -1,5 +1,7 @@
 #include "Resistor.h"
 
+using namespace std;
+
 Resistor::Resistor(string const& name, double const& r, Connection & p, Connection & n) : 
 	Component{name, p, n}, 
 	resistance{r}

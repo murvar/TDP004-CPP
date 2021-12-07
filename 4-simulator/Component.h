@@ -3,14 +3,15 @@
 #include <string>
 #include "Connection.h"
 
-using namespace std;
+//x Komplettering: Använd aldrig using i en h-fil! Den som inkluderar filen vill
+// kanske inte vill få in hela std i sitt namespace.
 
 class Component
 {
 public:
-	Component(string const& name, Connection & p, Connection & n );
+	Component(std::string const& name, Connection & p, Connection & n );
 
-	virtual ~Component();
+	virtual ~Component() = default;
 
 	virtual void compute(double const& time) =0;
 
@@ -18,10 +19,10 @@ public:
 
 	virtual double get_voltage();
 
-	string get_name() const;
+	std::string get_name() const;
 
 private:
-	const string name;
+	const std::string name;
 
 	Component(const Component&);
 
@@ -32,4 +33,3 @@ protected:
 	
 	Connection* n;
 };
-
