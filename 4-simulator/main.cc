@@ -14,10 +14,7 @@ using namespace std;
 
 void validate(int argc, char * argv [])
 {
-    //x Komplettering: Kontrollera alltid argc innan argv avrefereras. Man vill även
-    // ha ett speciellt felmeddelande om antalet argument inte stämmer, som förklarar
-    // vilka argument som förväntas.
-    // Komplettering: Gör rimlighetskontroll av värdena.
+    // Komplettering kvarstår: Gör rimlighetskontroll av värdena.
 	if(argc != 5)
 	{
 		cout << "Wrong number of arguments!" << endl;
@@ -67,6 +64,30 @@ void validate(int argc, char * argv [])
 		cout << "Voltage must be of type double!" << endl;
 		exit(1);
 	}
+
+	if (argv[1] <= 0)
+	{
+		cout << "Sim iterations must be a positive number!" << endl;
+		exit(1);
+	}
+
+	if (argv[2] <= 0)
+	{
+		cout << "Print iterations must be a positive number!" << endl;
+		exit(1);
+	}
+
+	if (argv[3] <= 0)
+	{
+		cout << "Time must be a positive number!" << endl;
+		exit(1);
+	}
+
+	if (argv[4] <= 0)
+	{
+		cout << "Voltage must be a positive number!" << endl;
+		exit(1);
+	}
 }
 
 void simulate(vector<Component*> & net, int const& sim_iterations, int const& print_iterations, const double & time)
@@ -81,7 +102,6 @@ void simulate(vector<Component*> & net, int const& sim_iterations, int const& pr
 
 	for (string::size_type i = 0; i < net.size(); ++i)
 	{
-            //x Komplettering: Använd setw istället för tab för att få till utseendet.
 		cout << "Volt" << setw(6) << "Curr" << setw(6);
 	}
 
