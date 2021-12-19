@@ -9,8 +9,8 @@ public:
     Linked_Stack(Linked_Stack const& stack);
     Linked_Stack(Linked_Stack&& stack);
     ~Linked_Stack();
-    //x? Komplettering: T kan vara av klasstyp, så den ska tas emot som const&.
-    void push(T const value);
+    //x Komplettering: T kan vara av klasstyp, så den ska tas emot som const&.
+    void push(T const& value);
     T pop();
     bool is_empty() const;
     int size() const;

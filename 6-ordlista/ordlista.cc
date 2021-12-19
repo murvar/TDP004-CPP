@@ -9,7 +9,12 @@
 
 using namespace std;
 
-int largest{0};
+// Komplettering kvarstår: Fungerar ej korrekt för följande ord:
+// AAA'S ska vara giltigt, men genetivet ska tas bort.
+// aaa's ska vara giltigt, men genetivet ska tas bort.
+// aaa- ska inte vara giltigt, eftersom det har ett bindestreck sist.
+// aaa( ska inte vara giltigt, eftersom eftersom ( inte är avslutande skräp.
+// &aaa ska inte giltigt, eftersom & inte är inledande skräp.
 
 string clean_word(string word)
 {
@@ -20,47 +25,39 @@ string clean_word(string word)
     {
         return "";
     }
-    if (word.find('.') != string::npos)
+
+    if (word.at(0) == '-' || word.back() == '-')
     {
         return "";
     }
-    if (word.find("()") != string::npos)
-    {
-        return "";
-    }
-    if (word.find("'s's") != string::npos)
-    {
-        return "";
-    }
-    if (word.find('#') != string::npos)
-    {
-        return "";
-    }
-    if (word.find('!') != string::npos)
-    {
-        return "";
-    }
-    if (word.find('<') != string::npos)
-    {
-        return "";
-    }
+
+    if (word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'") != string::npos)
+            return "";
+
     else
     {
+        transform(word.begin(), word.end(), word.begin(),
+        [](unsigned char c){ return tolower(c);});
+
+        if (word.find("'s's") != string::npos)
+        {
+            return "";
+        }
+
         word = word.substr(0, word.find("'s"));
+
         if (word.length() < 3)
         {
             return "";
         }
-        transform(word.begin(), word.end(), word.begin(),
-        [](unsigned char c){ return tolower(c);});
-        if (word.size() > largest)
-        {
-            largest = word.size();
-        }
+        
+
         return word; 
     }        
 }
 
+// Kommentar: Föredra att använda std::vector som (i de allra flesta fall) är
+// mycket effektivare än std::list.
 list<string> get_file_list(string const& file_name)
 {
     ifstream ifs{file_name};
@@ -83,6 +80,8 @@ list<string> clean_file(list<string> file_list)
 
 bool compare_strings (const pair<string,int>& a, const pair<string,int>& b)
 {
+  // Kommentar: Denna jämförelse är redan implementerad hos string, så du skulle kunna
+  // byta ut det mot a.first < b.first.
   unsigned int i=0;
   while ( (i<a.first.length()) && (i<b.first.length()) )
   {
@@ -98,14 +97,14 @@ bool compare_frequency (const pair<string,int>& a, const pair<string,int>& b)
   return ( a.second > b.second );
 }
 
-string get_a_string(const pair<string,int>& word_pair)
+string get_a_string(const pair<string,int>& word_pair, int largest)
 {
     stringstream ss;
     ss << left << setw(largest+1) << word_pair.first << right << word_pair.second << endl;
     return(ss.str());
 }
 
-string get_f_string(const pair<string,int>& word_pair)
+string get_f_string(const pair<string,int>& word_pair, int largest)
 {
     stringstream ss;
     ss << right << setw(largest) << word_pair.first << " " << word_pair.second << endl;
@@ -162,6 +161,8 @@ int main(int argc, char** argv)
     transform(begin(vs), end(vs), back_inserter(word_pairs),
     [v](string const& word) -> pair<string, int>{return make_pair(word, count(begin(v), end(v), word));});
             
+    string largest_element = *max_element(begin(v), end(v));
+    int largest = largest_element.size();
 
     switch (parameter)
     {
@@ -169,7 +170,7 @@ int main(int argc, char** argv)
             word_pairs.sort(compare_strings);
 
             transform(begin(word_pairs), end(word_pairs), ostream_iterator<string>(cout, ""), 
-            [](pair<string, int> const& word_pair) -> string{return get_a_string(word_pair);});
+            [largest](pair<string, int> const& word_pair) -> string{return get_a_string(word_pair, largest);});
 
             break;
 
@@ -177,7 +178,7 @@ int main(int argc, char** argv)
             word_pairs.sort(compare_frequency);
 
             transform(begin(word_pairs), end(word_pairs), ostream_iterator<string>(cout, ""), 
-            [](pair<string, int> const& word_pair) -> string{return get_f_string(word_pair);});
+            [largest](pair<string, int> const& word_pair) -> string{return get_f_string(word_pair, largest);});
 
             break;
 

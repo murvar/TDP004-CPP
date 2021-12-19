@@ -37,7 +37,7 @@ Linked_Stack<T>::~Linked_Stack()
 }
 
 template <typename T>
-void Linked_Stack<T>::push(T data)
+void Linked_Stack<T>::push(T const& data)
 {
     top = new Node{data, top};
     size_of_stack += 1;
@@ -92,7 +92,7 @@ void Linked_Stack<T>::display() const
             std::cout << temp->data;
             if (temp->next != nullptr)
             {
-                std::cout << "-> ";
+                std::cout << " -> ";
             }
             temp = temp->next;
         }
